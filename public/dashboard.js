@@ -116,10 +116,11 @@ function uploadFile() {
   const formData = new FormData();
   formData.append('file', file);
 
-  fetch('http://localhost:5000/upload', {
+  fetch('https://itsnotopia-87q9.vercel.app/upload', {
     method: 'POST',
     body: formData
   })
+  
     .then(response => response.json())
     .then(data => {
       if (data.success) {
@@ -152,7 +153,7 @@ function sendNoteToChatbot(noteContent) {
   userMessage.textContent = `Summarize the following note: \n\n${noteContent}`;
   chatbox.appendChild(userMessage);
 
-  fetch("http://localhost:5000/chat", {
+  fetch("https://itsnotopia-87q9.vercel.app/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: `Summarize this content: \n\n${noteContent}` }),
@@ -173,7 +174,7 @@ function sendNoteToChatbot(noteContent) {
 // === MODERN QUIZ SECTION ===
 
 function generateQuizFromText(text) {
-  fetch("http://localhost:5000/chat", {
+  fetch("https://itsnotopia-87q9.vercel.app/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
