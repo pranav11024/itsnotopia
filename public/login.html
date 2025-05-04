@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notopia | Notes Sharing Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --accent-primary: #007bff;
+      --accent-secondary: #0056b3;
+      --accent-tertiary: #003366;
+      --bg-primary: url('logingif.gif');
+      --bg-secondary: #ffffff;
+      --text-primary: #333333;
+      --text-secondary: #666666;
+      --navbar-bg: #222;
+      --navbar-text: #ffffff;
+      --border-color: #ddd;
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --hover-color: #f1faff;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --text-primary: #f0f0f0;
+      --text-secondary: #aaaaaa;
+      --navbar-bg: #0a0a0a;
+      --navbar-text: #ffffff;
+      --border-color: #333;
+      --shadow-color: rgba(0, 0, 0, 0.4);
+      --hover-color: #2a2a2a;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-primary);
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      color: var(--text-primary);
+    }
+
+    .login-container {
+      background: var(--bg-secondary);
+      padding: 30px;
+      box-shadow: 0px 8px 16px var(--shadow-color);
+      border-radius: 10px;
+      text-align: center;
+      width: 350px;
+      transition: all 0.3s ease;
+      background: linear-gradient(to right, #f0f9ff, #cbebff);
+    }
+
+    .login-container:hover {
+      box-shadow: 0px 12px 24px var(--shadow-color);
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      color: var(--accent-primary);
+    }
+
+    input {
+      display: block;
+      margin: 15px auto;
+      padding: 10px;
+      width: 80%;
+      font-size: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+    }
+
+    button {
+      background: var(--accent-primary);
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      width: 80%;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: var(--accent-secondary);
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .google-btn {
+      background: #4285F4;
+      color: white;
+      padding: 10px;
+      width: 80%;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+    }
+
+    .google-btn:hover {
+      background: #3367D6;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-container card">
+    <h2>Welcome</h2>
+
+    <!-- Get the 'type' parameter from the URL (teacher or student) -->
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const userType = urlParams.get('type'); // Get the 'type' parameter from the URL
+
+      if (userType === 'teacher') {
+        // Show login form for teachers (username/password)
+        document.getElementById('username-password').style.display = 'block';
+        document.getElementById('google-login').style.display = 'none';
+        document.getElementById('create-account').style.display = 'none';
+      } else if (userType === 'student') {
+        // Show Google Sign-In for students
+        document.getElementById('username-password').style.display = 'none';
+        document.getElementById('google-login').style.display = 'block';
+        document.getElementById('create-account').style.display = 'none';
+      }
+    </script>
+
+    <!-- Manual username/password login (only visible for teachers) -->
+    <div id="username-password">
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Google Sign In (only visible for students) -->
+    <div id="google-login">
+      <a href="http://localhost:5000/auth/google" class="google-btn">
+        <i class="fab fa-google" style="margin-right: 8px;"></i> Sign in with Google
+      </a>
+    </div>
+
+    <!-- Text line -->
+    <p style="margin-top: 20px; font-size: 16px; color: #555;">Don't have an account? Create one below</p>
+    <div id="create-account">
+      <p style="font-size: 14px; color: #555;">For teacher login, use your credentials. For students, you can sign in via Google.</p>
+    </div>
+
+    <div class="footer">
+      Powered by Cohere AI &bull; Smart Notes Portal
+    </div>
+  </div>
+
+  <script>
+    async function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!username || !password) {
+        alert("Please enter both username and password.");
+        return;
+      }
+
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("username", username);
+        window.location.href = "dashboard.html"; // Redirect to the dashboard
+      } else {
+        alert("Invalid Credentials");
+      }
+    }
+  </script>
+
+</body>
+</html>

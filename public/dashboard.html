@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notopia - Notes Sharing Portal</title>
+  <link rel="icon" href="../EB.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --accent-primary: #0808a7;
+      --accent-secondary: #1d879f;
+      --accent-tertiary: #0d5b63;
+      --accent-light: #ffcdd9;
+      
+      --bg-primary: #f4f4f9;
+      --bg-secondary: #ffffff;
+      --text-primary: #333333;
+      --text-secondary: #666666;
+      --card-gradient-1: linear-gradient(135deg, #042553, #0b7482);
+      --card-gradient-2: linear-gradient(135deg, #042533, #0b7482);
+      --navbar-bg: #222;
+      --navbar-text: #ffffff;
+      --border-color: #ddd;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --hover-color: #eee;
+    }
+
+    .nav-btn {
+  background: #00416a;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  margin-left: auto;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: #007bff;
+}
+
+
+    [data-theme="dark"] {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --text-primary: #f0f0f0;
+      --text-secondary: #aaaaaa;
+      --card-gradient-1: linear-gradient(135deg, #c50b4c, #9c0a3c);
+      --card-gradient-2: linear-gradient(135deg, #f0638b, #c50b4c);
+      --navbar-bg: #0a0a0a;
+      --navbar-text: #ffffff;
+      --border-color: #333;
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --hover-color: #2a2a2a;
+    }
+
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+  font-family: 'Poppins', sans-serif;
+  background: url("/dark-bg.gif") no-repeat center center fixed;
+  background-size: cover;
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  display: flex;  
+  min-height: 100vh;
+}
+
+#quiz-container {
+  display: none;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #1e1e2f;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  color: #f0f0f0;
+  font-family: sans-serif;
+}
+
+.quiz-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #a0a0a0;
+}
+
+.quiz-box h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #fff;
+}
+
+.quiz-box label {
+  display: block;
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+.quiz-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #666;
+  border-radius: 6px;
+  background-color: #2c2c3b;
+  color: white;
+}
+
+.quiz-box button {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background-color: #0b7482;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.quiz-box button:hover {
+  background-color: #095e68;
+}
+
+
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--navbar-bg);
+      color: var(--navbar-text);
+      padding: 15px 20px;
+      box-shadow: 0 2px 10px var(--shadow-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .navbar .logo {
+      font-size: 22px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo i {
+      font-size: 24px;
+      color: var(--accent-primary);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: var(--navbar-text);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .chatbot-toggle {
+      background: var(--accent-primary);
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 20px;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chatbot-toggle:hover {
+      background-color: var(--accent-secondary);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .banner {
+      width: 100%;
+      height: 200px;
+      background-color: var(--accent-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .banner-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      text-align: center;
+    }
+
+    .banner-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .banner-subtitle {
+      font-size: 1.2rem;
+      max-width: 600px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    .card {
+      height: 140px;
+      background: var(--card-gradient-1);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0px 4px 12px var(--shadow-color);
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card:hover::before {
+      transform: translateX(0);
+    }
+
+    .card-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      opacity: 0.7;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown .card {
+      background: var(--card-gradient-2);
+    }
+
+    .dropdown-content {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: var(--bg-secondary);
+      box-shadow: 0px 4px 12px var(--shadow-color);
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      z-index: 10;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: flex;
+    }
+
+    .dropdown-content div {
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: 0.3s;
+      color: var(--text-primary);
+    }
+
+    .dropdown-content div:hover {
+      background: var(--hover-color);
+    }
+
+    .subject-container {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: var(--bg-secondary);
+      box-shadow: 0px 4px 12px var(--shadow-color);
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 20px auto;
+    }
+
+    .subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .subject-meta {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .meta-item i {
+      color: var(--accent-primary);
+    }
+
+    .upload-area {
+      background: var(--bg-secondary);
+      border: 2px dashed var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .upload-area:hover {
+      border-color: var(--accent-primary);
+    }
+
+    .upload-area i {
+      font-size: 32px;
+      color: var(--accent-primary);
+      margin-bottom: 10px;
+    }
+
+    .upload-btn {
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .upload-btn:hover {
+      background: var(--accent-secondary);
+    }
+
+    .file-input {
+      opacity: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .note-list {
+      margin-top: 20px;
+    }
+
+    .note-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-primary);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+
+    .note-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow-color);
+    }
+
+    .note-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .note-icon {
+      font-size: 24px;
+      color: var(--accent-primary);
+    }
+
+    .note-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .note-btn {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .note-btn:hover {
+      background: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+    }
+
+    .note-btn i {
+      font-size: 14px;
+    }
+
+    .chatbot-panel {
+  position: fixed;
+  right: -1200px;
+  top: 0;
+  bottom: 0;
+  width: 1200px;
+  background: url('/cbbg.png') no-repeat center center fixed; 
+  background-size: cover;  
+  border-left: 2px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  transition: right 0.3s ease;
+  z-index: 1000;
+  box-shadow: -5px 0 15px var(--shadow-color);
+}
+
+    .chatbot-panel.open {
+      right: 0;
+    }
+
+    .chatbot-header {
+      background: var(--accent-primary);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .close-chatbot {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .chatbox {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 10px 15px;
+      border-radius: 18px;
+      margin-bottom: 5px;
+      word-wrap: break-word;
+    }
+
+    .bot-message {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border-top-left-radius: 5px;
+      align-self: flex-start;
+    }
+
+    .user-message {
+      background: var(--accent-primary);
+      color: white;
+      border-top-right-radius: 5px;
+      align-self: flex-end;
+    }
+
+    .chat-input-container {
+      display: flex;
+      padding: 15px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .chat-input:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .send-btn {
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .send-btn:hover {
+      background: var(--accent-secondary);
+    }
+
+    .toggle-chatbot {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 8px var(--shadow-color);
+      z-index: 1000;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-chatbot:hover {
+      background: var(--accent-secondary);
+      transform: scale(1.05);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      
+      .banner-title {
+        font-size: 1.8rem;
+      }
+      
+      .banner-subtitle {
+        font-size: 1rem;
+      }
+    }
+    .animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.animated-bg.dark {
+  display: none;
+  background-image: url('/dark-bg.gif');
+}
+
+[data-theme="dark"] .animated-bg.dark {
+  display: block;
+}
+
+  </style>
+</head>
+<body>
+  <div class="animated-bg dark"></div>
+  <div class="main-container">
+    <div class="navbar">
+      <div class="navbar-content">
+        <div class="logo">
+          <i class="fas fa-book"></i>
+          🔮🌌Notopia
+        </div>
+      </div>
+      <div class="navbar-content">
+        <button class="nav-btn" onclick="window.location.href='studyzone.html'">
+          <i class="fas fa-brain"></i> Study Zone
+        </button>
+        <button id="theme-toggle" class="theme-toggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button id="chatbot-toggle-nav" class="chatbot-toggle">
+          <i class="fas fa-robot"></i>
+          Assistant
+        </button>
+        <div class="user-info">
+          <!-- If the user has an avatar (profile picture), show it; otherwise, show initials -->
+          <div class="user-avatar" id="user-avatar">U</div>
+          <span id="user-role">Student</span>
+          <button class="chatbot-toggle" onclick="logout()" style="margin-left: 10px;">Logout</button>
+        </div>       
+        
+      </div>
+    </div>
+
+    <div class="banner">
+      <img src="\abcdefg.jpeg" alt="Banner Image" id="banner-img">
+      <div class="banner-overlay">
+        <div class="banner-title">Notopia - Notes Sharing Portal</div>
+        <div class="banner-subtitle">Collaborate, Share, and Learn Together</div>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <div class="container">
+        <div class="card" onclick="openSubject('Software Engineering', '19CSE314', 3)">
+          <i class="fas fa-code card-icon"></i>
+          Software Engineering
+        </div>
+        <div class="card" onclick="openSubject('Principles of Programming Language', '19CSE313', 3)">
+          <i class="fas fa-laptop-code card-icon"></i>
+          Principles of Programming Language
+        </div>
+        <div class="card" onclick="openSubject('Distributed Systems', '19CSE312', 4)">
+          <i class="fas fa-network-wired card-icon"></i>
+          Distributed Systems
+        </div>
+        <div class="card" onclick="openSubject('Computer Security', '19CSE311', 3)">
+          <i class="fas fa-shield-alt card-icon"></i>
+          Computer Security
+        </div>
+
+        <div class="dropdown">
+          <div class="card">
+            <i class="fas fa-puzzle-piece card-icon"></i>
+            Professional Elective 2
+          </div>
+          <div class="dropdown-content">
+            <div onclick="openSubject('Ethical Hacking', '19CSE335', 3)">
+              <i class="fas fa-user-secret"></i> Ethical Hacking
+            </div>
+            <div onclick="openSubject('Deep Learning for Computer Vision', '19CSE437', 3)">
+              <i class="fas fa-eye"></i> Deep Learning for Computer Vision
+            </div>
+            <div onclick="openSubject('Cloud Computing', '19CSE445', 3)">
+              <i class="fas fa-cloud"></i> Cloud Computing
+            </div>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <div class="card">
+            <i class="fas fa-puzzle-piece card-icon"></i>
+            Professional Elective 3
+          </div>
+          <div class="dropdown-content">
+            <div onclick="openSubject('Mobile and Wireless Security', '19CSE338', 3)">
+              <i class="fas fa-mobile-alt"></i> Mobile and Wireless Security
+            </div>
+            <div onclick="openSubject('Internet of Things', '19CSE446', 3)">
+              <i class="fas fa-microchip"></i> Internet of Things
+            </div>
+            <div onclick="openSubject('Neural Networks and Deep Learning', '19CSE456', 3)">
+              <i class="fas fa-brain"></i> Neural Networks and Deep Learning
+            </div>
+            <div onclick="openSubject('Time Series Analysis', '22AIE463', 3)">
+              <i class="fas fa-chart-line"></i> Time Series Analysis
+            </div>       
+          </div>
+        </div>        
+      </div>
+   
+      
+      
+      
+      <h2 style="margin: 20px 0 10px 100px; font-size: 24px; text-align: left;">📅 My Calendar</h2>
+
+<div style="width: 100%; display: flex; justify-content: flex-start; padding-left: 100px; margin-top: -10px;">
+  <iframe
+    src="https://calendar.google.com/calendar/embed?src=ab2507bf49c7c891c61e96340d4a4f2fae2ac83d7f25b005e480bb77b787f128%40group.calendar.google.com&ctz=Asia%2FKolkata&mode=MONTH&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
+    style="border: 1px solid #ccc;"
+    width="1000"
+    height="600"
+    frameborder="0"
+    scrolling="no">
+  </iframe>
+</div>
+
+<button id="start-quiz-btn" onclick="renderModernQuiz()" style="display: none; margin-top: 20px;">Start Quiz</button>
+<div id="quiz-container" style="margin-top: 20px;"></div>
+
+
+
+
+      <div id="subject-container" class="subject-container">
+        <div class="subject-header">
+          <h2 id="subject-title"></h2>
+          <button class="note-btn" id="back-btn" onclick="closeSubject()">
+            <i class="fas fa-arrow-left"></i> Back 
+          </button>
+        </div>
+        
+        <div class="subject-meta">
+          <div class="meta-item">
+            <i class="fas fa-bookmark"></i>
+            <span id="course-code"></span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-star"></i>
+            <span id="course-credits"></span> Credits
+          </div>
+        </div>
+
+        <div id="upload-area" style="display: none;">
+          <a id="open-drive" class="upload-btn" href="#" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-upload"></i> Manage Drive
+          </a>
+        </div>
+
+        <h3><i class="fas fa-list-ul"></i> Available Notes</h3>
+        <div class="note-list" id="note-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="toggle-chatbot" id="toggle-chatbot">
+    <i class="fas fa-comment"></i>
+  </button>
+
+  <div class="chatbot-panel" id="chatbot-panel">
+    <div class="chatbot-header">
+      <span><i class="fas fa-robot"></i> Notopia CB</span>
+      <button class="close-chatbot" id="close-chatbot">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="chatbox" id="chatbox">
+      <div class="message bot-message">
+        Hello! I'm here to help summarize your notes. What would you like to know?
+      </div>
+    </div>
+    
+    <!-- Message Input Container (both for messaging and file upload) -->
+<div class="chat-input-container">
+  <!-- Input for messaging -->
+  <input type="text" id="user-input" class="chat-input" placeholder="Ask me something..." style="flex: 2; width: 80%; margin-right: 10px;" />
+  
+  <!-- Send button for messaging -->
+  <button class="send-btn" onclick="sendMessage()" style="border-radius: 50%; padding: 8px 12px; margin-right: 10px;">
+    <i class="fas fa-paper-plane"></i>
+  </button>
+
+  <!-- File upload input (hidden) -->
+  <input type="file" id="file-upload" class="file-input" style="display: none;" onchange="uploadFile()" />
+
+  <button onclick="document.getElementById('file-upload').click()">Upload Note</button>
+
+  
+  <!-- Upload button (triggers file selection) -->
+  <button class="send-btn" onclick="document.getElementById('note-file').click()" style="border-radius: 50%; padding: 8px 12px;">
+    <i class="fas fa-upload"></i>
+  </button>
+</div>
+
+  <script>
+    //let currentSubject = "";
+    
+    // Theme management
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon();
+    updateBannerImage(savedTheme);
+    
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcon();
+      updateBannerImage(next);
+    });
+    
+    function updateBannerImage(theme) {
+      const bannerImg = document.getElementById('banner-img');
+      if (bannerImg) {
+        bannerImg.src = theme === 'dark' ? "abcdefg_ulta.png" : "abcdefg.jpeg";
+      }
+    }
+    
+    function updateThemeIcon() {
+      const icon = document.getElementById('theme-toggle');
+      const theme = document.documentElement.getAttribute('data-theme');
+      icon.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    }
+    
+    // Show subject panel
+    function openSubject(subjectName, courseCode, credits) {
+  currentSubject = subjectName.toLowerCase();
+
+  const role = localStorage.getItem("role") || "student";
+  document.getElementById("upload-area").style.display = (role === "teacher") ? "block" : "none";
+
+  document.getElementById('subject-title').innerText = subjectName;
+  document.getElementById('course-code').innerText = courseCode;
+  document.getElementById('course-credits').innerText = credits;
+  document.getElementById('subject-container').style.display = 'block';
+
+  loadNotes(currentSubject);
+}
+
+    
+    // Close subject panel
+    function closeSubject() {
+      document.getElementById('subject-container').style.display = 'none';
+    }
+    
+    // Load notes from backend
+    async function loadNotes(subject) {
+  try {
+    const response = await fetch(`http://localhost:5000/notes/${subject.toLowerCase()}`);
+    const notes = await response.json();
+
+    console.log("Loading notes for:", subject);
+    console.log("Received notes:", notes);
+
+    const list = document.getElementById('note-list');
+    list.innerHTML = '';
+    const role = localStorage.getItem("role") || "student";
+
+    notes.forEach(note => {
+  const item = document.createElement('div');
+  item.className = 'note-item';
+
+  const extension = note.filename.split('.').pop().toLowerCase();
+  let iconClass = 'fas fa-file';
+  if (extension === 'pdf') iconClass = 'fas fa-file-pdf';
+  else if (['doc', 'docx'].includes(extension)) iconClass = 'fas fa-file-word';
+  else if (['ppt', 'pptx'].includes(extension)) iconClass = 'fas fa-file-powerpoint';
+
+  item.innerHTML = `
+    <div class="note-info">
+      <i class="${iconClass} note-icon"></i>
+      <div>
+        <div><a href="http://localhost:5000/file/${note._id}" target="_blank" style="text-decoration:none; color:inherit;">${note.filename}</a></div>
+        <small>Uploaded: ${new Date(note.uploadDate).toLocaleString()}</small>
+      </div>
+    </div>
+    <div class="note-actions">
+      <a href="http://localhost:5000/file/${note._id}" class="note-btn" download>
+        <i class="fas fa-download"></i> Download
+      </a>
+      <button class="note-btn" onclick="sendNoteToChatbot('${note.filename}')">
+        <i class="fas fa-robot"></i> Send to Chatbot
+      </button>
+      ${role === 'teacher' ? `
+        <button class="note-btn" onclick="deleteNote('${note._id}', '${subject}')">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      ` : ''}
+    </div>
+  `;
+
+  list.appendChild(item);
+});
+
+
+  } catch (err) {
+    console.error('Error loading notes:', err);
+  }
+}
+
+//upload    
+async function uploadNote() {
+  console.log("📤 uploadNote() triggered");
+
+  const fileInput = document.getElementById('note-file');
+  const file = fileInput.files[0];
+  if (!file || !currentSubject) {
+    console.warn("Missing file or subject:", file, currentSubject);
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('note', file);
+  formData.append('subject', currentSubject.toLowerCase());
+
+  try {
+  const response = await fetch('http://localhost:5000/upload', {
+    method: 'POST',
+    body: formData
+  });
+
+  const result = await response.json();
+  console.log("Upload response:", result); // ✅ Now added
+
+  if (result.success) {
+    alert(`✅ File "${file.name}" uploaded successfully.`);
+    console.log("Calling loadNotes with subject:", currentSubject);
+    loadNotes(currentSubject);
+  } else {
+    alert('❌ Upload failed.');
+  }
+} catch (err) {
+  console.error("Upload error:", err);
+  alert('🚫 Error uploading file.');
+}
+
+
+  fileInput.value = ""; // Reset input
+}
+
+    
+    // Delete note
+    async function deleteNote(fileId, subject) {
+      const confirmed = confirm("Are you sure you want to delete this file?");
+      if (!confirmed) return;
+    
+      try {
+        const res = await fetch(`http://localhost:5000/file/${fileId}`, {
+          method: 'DELETE'
+        });
+        const result = await res.json();
+        if (result.success) {
+          alert("Deleted successfully");
+          loadNotes(subject);
+        } else {
+          alert("Delete failed");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error deleting file");
+      }
+    }
+    
+    // Logout
+    function logout() {
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+    
+    // Chatbot toggle
+    document.getElementById('toggle-chatbot').addEventListener('click', toggleChatbot);
+    document.getElementById('chatbot-toggle-nav').addEventListener('click', toggleChatbot);
+    document.getElementById('close-chatbot').addEventListener('click', closeChatbot);
+    
+    function toggleChatbot() {
+      document.getElementById('chatbot-panel').classList.toggle('open');
+    }
+    function closeChatbot() {
+      document.getElementById('chatbot-panel').classList.remove('open');
+    }
+    
+    // Chatbot send
+    function sendMessage() {
+  const input = document.getElementById("user-input");
+  const message = input.value.trim();
+  if (!message) return;
+
+  const chatbox = document.getElementById("chatbox");
+  const userMessage = document.createElement("div");
+  userMessage.className = "message user-message";
+  userMessage.textContent = message;
+  chatbox.appendChild(userMessage);
+  input.value = "";
+
+  // Update fetch call for OpenAI API
+  fetch("http://localhost:5000/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const botMessage = document.createElement("div");
+    botMessage.className = "message bot-message";
+    botMessage.textContent = data.response || "No response received.";
+    chatbox.appendChild(botMessage);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  })
+  .catch(err => {
+    console.error("Chatbot error:", err);
+  });
+}
+
+    
+    document.getElementById('user-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+    
+    // Load role on startup
+    document.getElementById('user-role').innerText = localStorage.getItem('role') || 'Student';
+    </script>
+    <script src="dashboard.js"></script> 
+
+    <script>
+      const driveMap = {
+        "software": "https://drive.google.com/drive/folders/14JJKG2_fnbaibJ2C798KliTkvSM5P71E",
+        "principles of programming language": "https://drive.google.com/drive/folders/1kJCELq9imz1dCB32RawvlwBe6EAuzsCS",
+        "computer security": "https://drive.google.com/drive/folders/1n4GjB2WwCeuggQxuZGXfqoNry4Zg_8wn",
+        "distributed systems": "https://drive.google.com/drive/folders/1n0aKr0y7eZQ5B3vHcstQT5ds9xfSrqX8",
+        "ethical hacking": "https://drive.google.com/drive/folders/12cQBW6GF9V6w9PjuBAgFeTj3T6q6rSze",
+        "deep learning and computer vision": "https://drive.google.com/drive/folders/1cz_ksdX7uA_3W4VpAZbcXMMDvFAsVdE-",
+        "cloud computing": "https://drive.google.com/drive/folders/1WThFzpQwbnMdWGleJ2HvzBFWBIGHAXBp",
+        "mobile wireless": "https://drive.google.com/drive/folders/1Y1XylMXVEAp-Zav2tBo708zbHH7Q8jLS",
+        "internet of things": "https://drive.google.com/drive/folders/1JIArzFHhDUZQsGB-8QCJ-4jdTq18R6mG",
+        "neural networks": "https://drive.google.com/drive/folders/1SEDWFyAhmP0168NRGSJYRU1hXsJ-w8KF",
+        "time series analysis": "https://drive.google.com/drive/folders/1JwqtEL8QVMTiNuxjD4lbhQQBBanjzvqU"
+      };
+      
+      function openSubject(subjectName, courseCode, credits) {
+        currentSubject = subjectName.toLowerCase();
+        const role = localStorage.getItem("role") || "student";
+      
+        document.getElementById('subject-title').innerText = subjectName;
+        document.getElementById('course-code').innerText = courseCode;
+        document.getElementById('course-credits').innerText = credits;
+        document.getElementById('subject-container').style.display = 'block';
+        
+        const driveLink = driveMap[currentSubject];
+        const list = document.getElementById('note-list');
+        list.innerHTML = '';
+      
+        if (!driveLink) {
+          list.innerHTML = "<p style='color:red;'>No folder linked for this subject.</p>";
+          return;
+        }
+      
+        if (role === "teacher") {
+  document.getElementById("upload-area").style.display = "block";
+  const link = driveMap[currentSubject];
+  document.getElementById("manage-drive-link").href = link;
+}
+ else {
+          document.getElementById("upload-area").style.display = "none";
+        }
+      
+        list.innerHTML = `
+          <div class="note-item">
+            <div class="note-info">
+              <i class="fas fa-folder-open note-icon"></i>
+              <div><strong>Notes available in Google Drive</strong></div>
+            </div>
+            <div class="note-actions">
+              <a class="note-btn" href="${driveLink}" target="_blank">
+                <i class="fas fa-eye"></i> View Folder
+              </a>
+            </div>
+          </div>
+        `;
+      }
+      
+      function logout() {
+        localStorage.clear();
+        window.location.href = "index.html";
+      }
+      </script>
+      
+      <script src="dashboard.js"></script>
+
+      <div class="chatbot-panel" id="chatbot-panel">
+        <div class="chatbot-header">
+          <span><i class="fas fa-robot"></i> Notes Assistant</span>
+          <button class="close-chatbot" id="close-chatbot" onclick="document.getElementById('chatbot-panel').classList.remove('open')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="chatbox" id="chatbox">
+          <div class="message bot-message">
+            Hello! I'm here to help summarise your notes. Upload a file or paste your query.
+          </div>
+        </div>
+        <div class="chat-input-container">
+          <input type="text" id="user-input" class="chat-input" placeholder="Ask me something...">
+          <button class="send-btn" onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
+      <script>
+  document.getElementById('user-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  function sendMessage() {
+    const input = document.getElementById("user-input");
+    const message = input.value.trim();
+    if (!message) return;
+
+    const chatbox = document.getElementById("chatbox");
+    const userMessage = document.createElement("div");
+    userMessage.className = "message user-message";
+    userMessage.textContent = message;
+    chatbox.appendChild(userMessage);
+    input.value = "";
+
+    fetch("http://localhost:5000/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const botMessage = document.createElement("div");
+      botMessage.className = "message bot-message";
+      botMessage.textContent = data.response || "No response received.";
+      chatbox.appendChild(botMessage);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch(err => {
+      console.error("Chatbot error:", err);
+    });
+  }
+</script>
+
+
+    
+</body>
+</html>
