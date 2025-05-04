@@ -26,26 +26,6 @@
       --hover-color: #eee;
     }
 
-    .nav-btn {
-  background: #00416a;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  margin-left: auto;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.nav-btn:hover {
-  background: #007bff;
-}
-
-
     [data-theme="dark"] {
       --bg-primary: #121212;
       --bg-secondary: #1e1e1e;
@@ -705,9 +685,6 @@
         </div>
       </div>
       <div class="navbar-content">
-        <button class="nav-btn" onclick="window.location.href='studyzone.html'">
-          <i class="fas fa-brain"></i> Study Zone
-        </button>
         <button id="theme-toggle" class="theme-toggle">
           <i class="fas fa-moon"></i>
         </button>
@@ -720,7 +697,9 @@
           <div class="user-avatar" id="user-avatar">U</div>
           <span id="user-role">Student</span>
           <button class="chatbot-toggle" onclick="logout()" style="margin-left: 10px;">Logout</button>
-        </div>       
+        </div>
+        
+        
         
       </div>
     </div>
@@ -787,13 +766,10 @@
             </div>
             <div onclick="openSubject('Time Series Analysis', '22AIE463', 3)">
               <i class="fas fa-chart-line"></i> Time Series Analysis
-            </div>       
+            </div>
           </div>
-        </div>        
+        </div>
       </div>
-   
-      
-      
       
       <h2 style="margin: 20px 0 10px 100px; font-size: 24px; text-align: left;">📅 My Calendar</h2>
 
@@ -818,7 +794,7 @@
         <div class="subject-header">
           <h2 id="subject-title"></h2>
           <button class="note-btn" id="back-btn" onclick="closeSubject()">
-            <i class="fas fa-arrow-left"></i> Back 
+            <i class="fas fa-arrow-left"></i> Back
           </button>
         </div>
         

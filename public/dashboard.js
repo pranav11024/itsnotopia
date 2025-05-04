@@ -50,13 +50,13 @@ async function loadNotes(subject) {
   const embedLink = `https://drive.google.com/embeddedfolderview?id=${folderId}#list`;
   list.innerHTML = `
     <iframe src="${embedLink}" style="width:100%; height:500px; border:none; margin-bottom:20px;"></iframe>
-    <div style="margin-top:10px;"><strong>Manual Notes</strong></div>
+    <div style="margin-top:10px;"><strong></strong></div>
   `;
 
-  const sampleFiles = [
-    { filename: "Unit1_Intro.pdf", url: embedLink },
-    { filename: "Week3_Examples.pdf", url: embedLink },
-  ];
+  // const sampleFiles = [
+  //   { filename: "Unit1_Intro.pdf", url: embedLink },
+  //   { filename: "Week3_Examples.pdf", url: embedLink },
+  // ];
 
   sampleFiles.forEach(note => {
     const noteCard = document.createElement("div");
@@ -116,11 +116,10 @@ function uploadFile() {
   const formData = new FormData();
   formData.append('file', file);
 
-  fetch('https://itsnotopia-87q9.vercel.app/upload', {
+  fetch('http://localhost:5000/upload', {
     method: 'POST',
     body: formData
   })
-  
     .then(response => response.json())
     .then(data => {
       if (data.success) {
@@ -153,7 +152,7 @@ function sendNoteToChatbot(noteContent) {
   userMessage.textContent = `Summarize the following note: \n\n${noteContent}`;
   chatbox.appendChild(userMessage);
 
-  fetch("https://itsnotopia-87q9.vercel.app/chat", {
+  fetch("http://localhost:5000/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: `Summarize this content: \n\n${noteContent}` }),
@@ -174,7 +173,7 @@ function sendNoteToChatbot(noteContent) {
 // === MODERN QUIZ SECTION ===
 
 function generateQuizFromText(text) {
-  fetch("https://itsnotopia-87q9.vercel.app/chat", {
+  fetch("http://localhost:5000/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

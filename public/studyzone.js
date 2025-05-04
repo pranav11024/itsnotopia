@@ -111,19 +111,17 @@ function renderTasks() {
     const formData = new FormData();
     formData.append("file", file);
   
-    fetch("https://itsnotopia-87q9.vercel.app/flowchart", {
+    fetch("http://localhost:5000/flowchart", {
       method: "POST",
       body: formData
     })
-    
       .then(response => response.json())
       .then(data => {
         const renderDiv = document.getElementById("flowchart-render");
         renderDiv.innerHTML = `<img src="${data.imageUrl}" alt="Generated Flowchart" style="max-width: 100%; border-radius: 8px;" />`;
       
         const img = document.createElement("img");
-        img.src = `https://itsnotopia-87q9.vercel.app${data.imageUrl}`;
-
+        img.src = `http://localhost:5000${data.imageUrl}`;
         img.alt = "Generated Flowchart";
         img.style.maxWidth = "100%";
         img.style.border = "1px solid #ccc";
