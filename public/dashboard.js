@@ -20,6 +20,27 @@ function openSubject(subjectName, courseCode, credits) {
   document.getElementById("upload-area").style.display = role === "teacher" ? "block" : "none";
 
   loadNotes(currentSubject);
+
+  const driveLinks = {
+    "software engineering": "https://drive.google.com/drive/folders/14JJKG2_fnbaibJ2C798KliTkvSM5P71E",
+    "principles of programming language": "https://drive.google.com/drive/folders/1kJCELq9imz1dCB32RawvlwBe6EAuzsCS",
+    "computer security": "https://drive.google.com/drive/folders/1n4GjB2WwCeuggQxuZGXfqoNry4Zg_8wn",
+    "distributed systems": "https://drive.google.com/drive/folders/1n0aKr0y7eZQ5B3vHcstQT5ds9xfSrqX8",
+    "ethical hacking": "https://drive.google.com/drive/folders/12cQBW6GF9V6w9PjuBAgFeTj3T6q6rSze",
+    "deep learning for computer vision": "https://drive.google.com/drive/folders/1cz_ksdX7uA_3W4VpAZbcXMMDvFAsVdE-",
+    "cloud computing": "https://drive.google.com/drive/folders/1WThFzpQwbnMdWGleJ2HvzBFWBIGHAXBp",
+    "mobile and wireless security": "https://drive.google.com/drive/folders/1Y1XylMXVEAp-Zav2tBo708zbHH7Q8jLS",
+    "internet of things": "https://drive.google.com/drive/folders/1JIArzFHhDUZQsGB-8QCJ-4jdTq18R6mG",
+    "neural networks and deep learning": "https://drive.google.com/drive/folders/1SEDWFyAhmP0168NRGSJYRU1hXsJ-w8KF",
+    "time series analysis": "https://drive.google.com/drive/folders/1JwqtEL8QVMTiNuxjD4lbhQQBBanjzvqU",
+  };
+  
+  const driveLink = driveLinks[currentSubject];
+  if (driveLink) {
+    document.getElementById("open-drive").href = driveLink;
+  }
+  
+
 }
 
 async function loadNotes(subject) {
@@ -257,3 +278,5 @@ function logout() {
   localStorage.clear();
   window.location.href = "index.html";
 }
+
+
