@@ -127,10 +127,18 @@
     <h2>Welcome Student</h2>
   
     <!-- Google Sign In for student -->
-    <a href="http://localhost:5000/auth/google" class="google-btn">
-      <i class="fab fa-google" style="margin-right: 8px;"></i> Sign in with Google
-    </a>
-  
+<a id="google-signin" class="google-btn">
+  <i class="fab fa-google" style="margin-right: 8px;"></i> Sign in with Google
+</a>
+
+<script>
+  const BASE_URL = window.location.hostname.includes("localhost")
+    ? "http://localhost:5000"
+    : "https://itsnotopia.onrender.com";
+
+  document.getElementById("google-signin").href = `${BASE_URL}/auth/google`;
+</script>
+
     <div class="footer">
       Powered by Cohere AI &bull; Smart Notes Portal
     </div>
