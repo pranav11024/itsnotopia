@@ -279,7 +279,7 @@ app.get('/auth/google/callback',
       role: 'student',  // Default role for Google users
     }));
 
-    res.redirect('/dashboard.html');  // Redirect to the dashboard
+    res.redirect('/dashboard.html?role=student');
   }
 );
 

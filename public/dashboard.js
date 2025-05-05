@@ -83,6 +83,13 @@ async function loadNotes(subject) {
 }
 
 function loadUserInfo() {
+
+  const params = new URLSearchParams(window.location.search);
+const roleFromQuery = params.get("role");
+
+if (roleFromQuery) {
+  localStorage.setItem("role", roleFromQuery);
+}
   const user = JSON.parse(localStorage.getItem("user"));
   if (user) {
     document.getElementById('user-role').textContent = user.role || 'student';
