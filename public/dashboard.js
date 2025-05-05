@@ -8,6 +8,11 @@
 //let currentQuestionIndex = 0;
 //let userScore = 0;
 
+// const BASE_URL = window.location.hostname.includes("localhost")
+//   ? "http://localhost:5000"
+//   : "https://itsnotopia.onrender.com";
+
+
 function openSubject(subjectName, courseCode, credits) {
   currentSubject = subjectName.toLowerCase();
   document.getElementById("subject-title").innerText = subjectName;
