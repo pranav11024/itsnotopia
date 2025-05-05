@@ -50,13 +50,13 @@ async function loadNotes(subject) {
   const embedLink = `https://drive.google.com/embeddedfolderview?id=${folderId}#list`;
   list.innerHTML = `
     <iframe src="${embedLink}" style="width:100%; height:500px; border:none; margin-bottom:20px;"></iframe>
-    <div style="margin-top:10px;"><strong>Manual Notes</strong></div>
+    <div style="margin-top:10px;"><strong></strong></div>
   `;
 
-  const sampleFiles = [
-    { filename: "Unit1_Intro.pdf", url: embedLink },
-    { filename: "Week3_Examples.pdf", url: embedLink },
-  ];
+  // const sampleFiles = [
+  //   { filename: "Unit1_Intro.pdf", url: embedLink },
+  //   { filename: "Week3_Examples.pdf", url: embedLink },
+  // ];
 
   sampleFiles.forEach(note => {
     const noteCard = document.createElement("div");
