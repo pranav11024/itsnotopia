@@ -1,17 +1,13 @@
+if (typeof BASE_URL === "undefined") {
+  var BASE_URL = window.location.hostname.includes("localhost")
+    ? "http://localhost:5000"
+    : "https://itsnotopia.onrender.com";
+}
+
 //let currentSubject = "";
-
-//let latestPDFText = "";
-//let quizData = "";
-//let correctAnswers = [];
-
 //let parsedQuiz = [];
 //let currentQuestionIndex = 0;
 //let userScore = 0;
-
-// const BASE_URL = window.location.hostname.includes("localhost")
-//   ? "http://localhost:5000"
-//   : "https://itsnotopia.onrender.com";
-
 
 function openSubject(subjectName, courseCode, credits) {
   currentSubject = subjectName.toLowerCase();
@@ -30,8 +26,6 @@ async function loadNotes(subject) {
   const list = document.getElementById("note-list");
   list.innerHTML = "";
 
-  const role = localStorage.getItem("role") || "student";
-
   const driveMap = {
     "software engineering": "14JJKG2_fnbaibJ2C798KliTkvSM5P71E",
     "principles of programming language": "1kJCELq9imz1dCB32RawvlwBe6EAuzsCS",
@@ -43,7 +37,7 @@ async function loadNotes(subject) {
     "mobile and wireless security": "1Y1XylMXVEAp-Zav2tBo708zbHH7Q8jLS",
     "internet of things": "1JIArzFHhDUZQsGB-8QCJ-4jdTq18R6mG",
     "neural networks and deep learning": "1SEDWFyAhmP0168NRGSJYRU1hXsJ-w8KF",
-    "time series analysis": "1JwqtEL8QVMTiNuxjD4lbhQQBBanjzvqU",
+    "time series analysis": "1JwqtEL8QVMTiNuxjD4lbhQQBBanjzvqU"
   };
 
   const folderId = driveMap[subject];
@@ -55,56 +49,24 @@ async function loadNotes(subject) {
   const embedLink = `https://drive.google.com/embeddedfolderview?id=${folderId}#list`;
   list.innerHTML = `
     <iframe src="${embedLink}" style="width:100%; height:500px; border:none; margin-bottom:20px;"></iframe>
-    <div style="margin-top:10px;"><strong></strong></div>
   `;
-
-  // const sampleFiles = [
-  //   { filename: "Unit1_Intro.pdf", url: embedLink },
-  //   { filename: "Week3_Examples.pdf", url: embedLink },
-  // ];
-
-  sampleFiles.forEach(note => {
-    const noteCard = document.createElement("div");
-    noteCard.className = "note-item";
-    noteCard.innerHTML = `
-      <div class="note-info">
-        <i class="fas fa-file-pdf note-icon"></i>
-        <div>
-          <div>${note.filename}</div>
-          <small>From Google Drive</small>
-        </div>
-      </div>
-      <div class="note-actions">
-        <a class="note-btn" href="${note.url}" target="_blank" download>
-          <i class="fas fa-download"></i> Download
-        </a>
-        <button class="note-btn" onclick="sendNoteToChatbot('${note.filename}')">
-          <i class="fas fa-robot"></i> Send to Chatbot
-        </button>
-      </div>
-    `;
-    list.appendChild(noteCard);
-  });
 }
 
 function loadUserInfo() {
-
   const params = new URLSearchParams(window.location.search);
-const roleFromQuery = params.get("role");
+  const roleFromQuery = params.get("role");
+  if (roleFromQuery) localStorage.setItem("role", roleFromQuery);
 
-if (roleFromQuery) {
-  localStorage.setItem("role", roleFromQuery);
-}
   const user = JSON.parse(localStorage.getItem("user"));
   if (user) {
-    document.getElementById('user-role').textContent = user.role || 'student';
-    const userAvatar = document.getElementById('user-avatar');
-    if (user && user.photo) {
+    document.getElementById("user-role").textContent = user.role || "student";
+    const userAvatar = document.getElementById("user-avatar");
+    if (user.photo) {
       userAvatar.style.backgroundImage = `url(${user.photo})`;
-      userAvatar.style.backgroundSize = 'cover';
-      userAvatar.style.backgroundPosition = 'center';
+      userAvatar.style.backgroundSize = "cover";
+      userAvatar.style.backgroundPosition = "center";
     } else {
-      const initials = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+      const initials = user.name ? user.name.charAt(0).toUpperCase() : "U";
       userAvatar.textContent = initials;
     }
   }
@@ -112,12 +74,9 @@ if (roleFromQuery) {
 loadUserInfo();
 
 function uploadFile() {
-  const fileInput = document.getElementById('file-upload');
+  const fileInput = document.getElementById("file-upload");
   const file = fileInput.files[0];
-  if (!file) {
-    alert('No file selected');
-    return;
-  }
+  if (!file) return alert("No file selected");
 
   const chatbox = document.getElementById("chatbox");
   const userMessage = document.createElement("div");
@@ -126,26 +85,26 @@ function uploadFile() {
   chatbox.appendChild(userMessage);
 
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append("file", file);
 
-  fetch('http://localhost:5000/upload', {
-    method: 'POST',
+  fetch(`${BASE_URL}/upload`, {
+    method: "POST",
     body: formData
   })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
       if (data.success) {
         userMessage.textContent = `File uploaded: ${file.name}. Ready for summarization.`;
         sendNoteToChatbot(data.text);
-        generateQuizFromText(data.text); // Hook for quiz
+        generateQuizFromText(data.text);
       } else {
-        alert('Failed to upload file');
+        alert("Failed to upload file");
         userMessage.textContent = `Failed to upload file: ${file.name}`;
       }
     })
-    .catch(error => {
-      console.error('Error uploading file:', error);
-      alert('Error uploading file');
+    .catch(err => {
+      console.error("Error uploading file:", err);
+      alert("Error uploading file");
       userMessage.textContent = `Error uploading file: ${file.name}`;
     });
 
@@ -154,9 +113,7 @@ function uploadFile() {
 
 function sendNoteToChatbot(noteContent) {
   const chatbotPanel = document.getElementById("chatbot-panel");
-  if (!chatbotPanel.classList.contains("open")) {
-    chatbotPanel.classList.add("open");
-  }
+  if (!chatbotPanel.classList.contains("open")) chatbotPanel.classList.add("open");
 
   const chatbox = document.getElementById("chatbox");
   const userMessage = document.createElement("div");
@@ -164,10 +121,10 @@ function sendNoteToChatbot(noteContent) {
   userMessage.textContent = `Summarize the following note: \n\n${noteContent}`;
   chatbox.appendChild(userMessage);
 
-  fetch("http://localhost:5000/chat", {
+  fetch(`${BASE_URL}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: `Summarize this content: \n\n${noteContent}` }),
+    body: JSON.stringify({ message: `Summarize this content: \n\n${noteContent}` })
   })
     .then(res => res.json())
     .then(data => {
@@ -177,15 +134,11 @@ function sendNoteToChatbot(noteContent) {
       chatbox.appendChild(botMessage);
       chatbox.scrollTop = chatbox.scrollHeight;
     })
-    .catch(err => {
-      console.error("Chatbot error:", err);
-    });
+    .catch(err => console.error("Chatbot error:", err));
 }
 
-// === MODERN QUIZ SECTION ===
-
 function generateQuizFromText(text) {
-  fetch("http://localhost:5000/chat", {
+  fetch(`${BASE_URL}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -201,8 +154,8 @@ Correct Answer: <A/B/C/D>
 Use exactly this format.
 
 Content:
-${text}`})
-    
+${text}`
+    })
   })
     .then(res => res.json())
     .then(data => {
@@ -223,10 +176,12 @@ function parseQuizData(rawText) {
     const questionLine = lines.find(l => /^\d+\.\s/.test(l)) || "";
     const questionText = questionLine.replace(/^\d+\.\s*/, "").trim();
 
-    const options = lines.filter(l => /^[A-D]\.\s*/i.test(l)).map(line => {
-      const [_, label, text] = line.match(/^([A-D])\.\s*(.*)$/i) || [];
-      return { label, text };
-    });
+    const options = lines
+      .filter(l => /^[A-D]\.\s*/i.test(l))
+      .map(line => {
+        const [_, label, text] = line.match(/^([A-D])\.\s*(.*)$/i) || [];
+        return { label, text };
+      });
 
     const answerLine = lines.find(l => /correct answer/i.test(l));
     const answerMatch = answerLine?.match(/Correct Answer:\s*([A-D])/i);
@@ -239,8 +194,6 @@ function parseQuizData(rawText) {
 
   return questions;
 }
-
-
 
 function renderModernQuiz() {
   const quizPanel = document.getElementById("quiz-container");
@@ -282,22 +235,17 @@ function renderModernQuiz() {
   quizPanel.appendChild(box);
 }
 
-
-
 function nextQuestion() {
   const q = parsedQuiz[currentQuestionIndex];
   const selected = document.querySelector(`input[name="quiz"]:checked`);
   if (!selected) return alert("Please select an option");
 
   const val = selected.value.trim().toUpperCase();
-  if (val === q.answer) {
-    userScore++;
-  }
+  if (val === q.answer) userScore++;
 
   currentQuestionIndex++;
   renderModernQuiz();
 }
-
 
 function restartModernQuiz() {
   currentQuestionIndex = 0;
