@@ -35,9 +35,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-  callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URL
+  clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,       // New client ID
+  clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET, // New secret
+  callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URL   // Must match redirect URI
 }, (accessToken, refreshToken, profile, done) => {
   done(null, profile);
 }));
