@@ -268,18 +268,20 @@ app.get('/auth/google',
 );
 
 // Google login callback
+// Google login callback
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     // Save user info in session or cookies
     res.cookie('user', JSON.stringify({
-      name: req.user.displayName,  // Google display name
-      email: req.user.emails[0].value,  // User's email
-      photo: req.user.photos ? req.user.photos[0].value : null,  // User's photo
-      role: 'student',  // Default role for Google users
+      name: req.user.displayName,
+      email: req.user.emails[0].value,
+      photo: req.user.photos ? req.user.photos[0].value : null,
+      role: 'student', // Default role for Google users
     }));
 
-    res.redirect('/dashboard.html?role=student');
+    // Updated redirect - remove query parameter
+    res.redirect('/dashboard.html');
   }
 );
 
