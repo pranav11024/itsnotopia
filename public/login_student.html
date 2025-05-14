@@ -6,152 +6,369 @@
   <link rel="icon" href="../EB.png" type="image/png">
   <title>Notopia | Student Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --accent-primary: #007bff;
-      --accent-secondary: #0056b3;
-      --accent-tertiary: #003366;
-      --bg-primary: url('logingif.gif');
-      --bg-secondary: #ffffff;
-      --text-primary: #333333;
-      --text-secondary: #666666;
-      --navbar-bg: #222;
-      --navbar-text: #ffffff;
-      --border-color: #ddd;
-      --shadow-color: rgba(0, 0, 0, 0.2);
-      --hover-color: #f1faff;
+      --primary: #FACC15; /* Mustard Yellow */
+      --primary-dark: #EAB308;
+      --accent: #EA580C; /* Burnt Orange */
+      --accent-dark: #C2410C;
+      --bg-primary: #FEF9C3; /* Cream */
+      --bg-secondary: #FEF08A;
+      --text-primary: #78350F; /* Warm Brown */
+      --text-secondary: #92400E;
+      --navbar-bg: #F59E0B;
+      --navbar-text: #78350F;
+      --border-color: #FCD34D;
+      --shadow-color: rgba(234, 88, 12, 0.2);
+      --hover-color: #FEF08A;
+      --card-bg: rgba(255, 255, 255, 0.9);
     }
 
     [data-theme="dark"] {
-      --bg-primary: #121212;
-      --bg-secondary: #1e1e1e;
-      --text-primary: #f0f0f0;
-      --text-secondary: #aaaaaa;
-      --navbar-bg: #0a0a0a;
-      --navbar-text: #ffffff;
-      --border-color: #333;
-      --shadow-color: rgba(0, 0, 0, 0.4);
-      --hover-color: #2a2a2a;
+      --primary: #F59E0B;
+      --primary-dark: #D97706;
+      --accent: #EA580C;
+      --accent-dark: #9A3412;
+      --bg-primary: #1E1E1E;
+      --bg-secondary: #2E2E2E;
+      --text-primary: #FEF3C7;
+      --text-secondary: #FCD34D;
+      --navbar-bg: #0F0F0F;
+      --navbar-text: #FEF3C7;
+      --border-color: #444;
+      --shadow-color: rgba(234, 88, 12, 0.4);
+      --hover-color: #2E2E2E;
+      --card-bg: rgba(30, 30, 30, 0.9);
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg-primary);
-      background-size: cover;
-      background-position: center;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-primary);
+      background-image: radial-gradient(circle at 10% 20%, var(--bg-secondary) 0%, var(--bg-primary) 90%);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       flex-direction: column;
       color: var(--text-primary);
+      transition: all 0.3s ease;
+      margin: 0;
     }
 
     .login-container {
-      background: var(--bg-secondary);
-      padding: 30px;
-      box-shadow: 0px 8px 16px var(--shadow-color);
-      border-radius: 10px;
+      background: var(--card-bg);
+      padding: 40px;
+      box-shadow: 0 10px 25px var(--shadow-color);
+      border-radius: 20px;
       text-align: center;
-      width: 350px;
+      width: 90%;
+      max-width: 400px;
       transition: all 0.3s ease;
-      background: linear-gradient(to right, #f0f9ff, #cbebff);
+      backdrop-filter: blur(5px);
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        transparent 0%,
+        transparent 49%,
+        var(--primary) 50%,
+        var(--accent) 100%
+      );
+      opacity: 0.1;
+      transform: rotate(30deg);
+      z-index: -1;
     }
 
     .login-container:hover {
-      box-shadow: 0px 12px 24px var(--shadow-color);
+      box-shadow: 0 15px 30px var(--shadow-color);
       transform: translateY(-5px);
     }
 
     h2 {
-      color: var(--accent-primary);
+      color: var(--text-primary);
+      font-size: 2rem;
+      margin-bottom: 25px;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px;
     }
 
     input {
       display: block;
-      margin: 15px auto;
-      padding: 10px;
+      margin: 20px auto;
+      padding: 12px 15px;
       width: 80%;
-      font-size: 16px;
+      font-size: 1rem;
       border: 1px solid var(--border-color);
-      border-radius: 5px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+      color: var(--text-primary);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.3);
     }
 
     button {
-      background: var(--accent-primary);
-      color: white;
-      padding: 10px;
+      background: var(--primary);
+      color: var(--text-primary);
+      padding: 12px;
       border: none;
       cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
+      font-size: 1rem;
+      border-radius: 8px;
       width: 80%;
-      margin-top: 15px;
+      margin-top: 20px;
       transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     button:hover {
-      background: var(--accent-secondary);
+      background: var(--primary-dark);
       transform: translateY(-2px);
+      box-shadow: 0 6px 12px var(--shadow-color);
     }
 
     .footer {
-      margin-top: 20px;
-      font-size: 14px;
+      margin-top: 25px;
+      font-size: 0.9rem;
       color: var(--text-secondary);
+      font-style: italic;
     }
 
     .google-btn {
-      background: #4285F4;
+      background: var(--accent);
       color: white;
-      padding: 10px;
+      padding: 12px;
       width: 80%;
-      border-radius: 5px;
-      font-size: 16px;
-      font-weight: bold;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 20px;
-      transition: background 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .google-btn i {
+      margin-right: 10px;
+      font-size: 1.2rem;
     }
 
     .google-btn:hover {
-      background: #3367D6;
-    } 
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px var(--shadow-color);
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: var(--text-primary);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(30deg) scale(1.1);
+    }
+
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: var(--primary);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+      }
+    }
+
+    /* Animation classes */
+    .fade-in {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 30px 20px;
+        width: 85%;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+      
+      input, button, .google-btn {
+        width: 90%;
+      }
+    }
   </style>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4980H5FQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){ dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-4D4980H5FQ');
-</script>
-
 </head>
-
 <body>
+  <button class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </button>
 
-  <div class="login-container card">
+  <div class="particles" id="particles"></div>
+
+  <div class="login-container fade-in pulse">
     <h2>Welcome Student</h2>
   
     <!-- Google Sign In for student -->
-<a id="google-signin" class="google-btn">
-  <i class="fab fa-google" style="margin-right: 8px;"></i> Sign in with Google
-</a>
-
-<script>
-  const BASE_URL = window.location.hostname.includes("localhost")
-    ? "http://localhost:5000"
-    : "https://itsnotopia.onrender.com";
-
-  document.getElementById("google-signin").href = `${BASE_URL}/auth/google`;
-</script>
+    <a id="google-signin" class="google-btn">
+      <i class="fab fa-google"></i> Sign in with Google
+    </a>
 
     <div class="footer">
       Powered by Cohere AI &bull; Smart Notes Portal
     </div>
   </div>
 
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    // Check for saved theme preference or use preferred color scheme
+    const savedTheme = localStorage.getItem('theme') || 
+                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    html.setAttribute('data-theme', savedTheme);
+    
+    // Update icon based on theme
+    updateThemeIcon();
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon();
+    });
+    
+    function updateThemeIcon() {
+      const currentTheme = html.getAttribute('data-theme');
+      themeToggle.innerHTML = currentTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    }
+    
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 15;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random properties
+        const size = Math.random() * 15 + 5;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100 + 100; // Start below viewport
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        // Randomly use primary or accent color
+        particle.style.backgroundColor = Math.random() > 0.5 ? 'var(--primary)' : 'var(--accent)';
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // Initialize particles
+    createParticles();
+    
+    // Google Sign In URL
+    const BASE_URL = window.location.hostname.includes("localhost")
+      ? "http://localhost:5000"
+      : "https://itsnotopia.onrender.com";
+    
+    document.getElementById("google-signin").href = `${BASE_URL}/auth/google`;
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4980H5FQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-4D4980H5FQ');
+  </script>
 </body>
 </html>
