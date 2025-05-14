@@ -9,6 +9,39 @@ if (typeof BASE_URL === "undefined") {
 //let currentQuestionIndex = 0;
 //let userScore = 0;
 
+ function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 100; // Number of particles
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random properties
+        const size = Math.random() * 15 + 5;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100 + 100; // Start below viewport
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        // Randomly use primary or accent color
+        particle.style.backgroundColor = Math.random() > 0.5 ? 'var(--primary)' : 'var(--accent)';
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // Initialize particles
+    createParticles();
+   
+
 function openSubject(subjectName, courseCode, credits) {
   currentSubject = subjectName.toLowerCase();
   document.getElementById("subject-title").innerText = subjectName;
