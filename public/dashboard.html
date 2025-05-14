@@ -852,7 +852,7 @@
     }
     
     // Show subject panel
-function openSubject(subjectName, courseCode, credits) {
+    function openSubject(subjectName, courseCode, credits) {
   currentSubject = subjectName.toLowerCase();
 
   const role = localStorage.getItem("role") || "student";
@@ -1086,7 +1086,7 @@ async function uploadNote() {
         if (role === "teacher") {
   document.getElementById("upload-area").style.display = "block";
   const link = driveMap[currentSubject];
-  document.getElementById("open-drive").href = link;
+  document.getElementById("manage-drive-link").href = link;
 }
  else {
           document.getElementById("upload-area").style.display = "none";
@@ -1105,11 +1105,6 @@ async function uploadNote() {
             </div>
           </div>
         `;
-
-        // Auto-scroll to the subject container
-        document.getElementById('subject-container').scrollIntoView({
-          behavior: 'smooth'
-        });
       }
       
       function logout() {
